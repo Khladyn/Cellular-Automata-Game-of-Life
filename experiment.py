@@ -39,7 +39,30 @@ class ExperimentRunner:
         delta = self.get_delta()
         diff_count = np.sum(delta)
         total_cells = delta.size
-        return diff_count, (diff_count / total_cells) * 100
+        
+        # 1. Standard Survival Score (Hamming)
+        control_sum = np.sum(self.control.grid)
+        if control_sum == 0:
+            survival_score = 1.0 if diff_count == 0 else 0.0
+        else:
+            survival_score = max(0.0, 1.0 - (diff_count / control_sum))
+            
+        # 2. Information Decay (Research Metric)
+        # Count cells that SHOULD be alive but are DEAD in the test grid
+        missing_cells = np.sum((self.control.grid == 1) & (self.test.grid == 0))
+        # Information Integrity: 1.0 = no missing cells, 0.0 = all intended cells gone
+        info_integrity = 1.0 - (missing_cells / control_sum) if control_sum > 0 else 1.0
+            
+        return diff_count, (diff_count / total_cells) * 100, survival_score, info_integrity
+
+    def check_collapse(self, threshold=0.5):
+        """
+        Returns True if the Information Integrity (pattern retention) 
+        drops below the threshold.
+        Example: threshold=0.5 means the system fails when 50% of the pattern is lost.
+        """
+        _, _, _, info_integrity = self.get_delta_stats()
+        return info_integrity < threshold
 
 if __name__ == "__main__":
     # Quick demonstration
