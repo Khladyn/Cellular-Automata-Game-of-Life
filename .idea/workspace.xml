@@ -4,13 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2057eb5-34ad-463f-a4b2-56fb23346fc4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/game_of_life.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="c2057eb5-34ad-463f-a4b2-56fb23346fc4" name="Changes" comment="add comparative simulation for block and gosper">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/batch_experiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/batch_experiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comparative_research_results.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_results.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/research_results.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_assets.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_engine.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_experiment.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/viz.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,14 +37,45 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.batch_experiment.executor": "Debug",
     "Python.main.executor": "Debug",
+    "Python.plot_results.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/research_output" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="batch_experiment" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="game_of_life" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.13 (game_of_life)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="batch_experiment.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="game_of_life" />
       <option name="ENV_FILES" value="" />
@@ -63,6 +100,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="plot_results" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="game_of_life" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.13 (game_of_life)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="plot_results.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.batch_experiment" />
+      <item itemvalue="Python.plot_results" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -79,6 +145,37 @@
       <option name="presentableId" value="Default" />
       <updated>1773983471359</updated>
     </task>
+    <task id="LOCAL-00001" summary="initialize simulation">
+      <option name="closed" value="true" />
+      <created>1773987831995</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1773987831995</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add information decay graph">
+      <option name="closed" value="true" />
+      <created>1773989264478</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1773989264478</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add comparative simulation for block and gosper">
+      <option name="closed" value="true" />
+      <created>1773994190080</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1773994190080</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="initialize simulation" />
+    <MESSAGE value="add information decay graph" />
+    <MESSAGE value="add comparative simulation for block and gosper" />
+    <option name="LAST_COMMIT_MESSAGE" value="add comparative simulation for block and gosper" />
   </component>
 </project>
