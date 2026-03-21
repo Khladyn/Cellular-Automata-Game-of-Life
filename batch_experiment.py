@@ -30,6 +30,11 @@ def run_research_batch(target_noise_levels, pattern_name="gosper_glider_gun", tr
 
             # Spatial Strategy: Centering the pattern to create a 'Vacuum Buffer'.
             load_pattern(runner.control, pattern_name, None, None)
+            
+            if pattern_name == "gosper_glider_gun":
+                # Place eater to intercept gliders at default offset (85, 84)
+                load_pattern(runner.control, "eater", x_offset=85, y_offset=84)
+
             runner.test.grid = runner.control.grid.copy()
 
             failed = False

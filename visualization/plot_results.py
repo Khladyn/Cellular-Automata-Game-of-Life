@@ -20,8 +20,8 @@ def generate_full_research_dashboard(levels):
     classes = {
         "Class 1: Static (Block)": "block",
         "Class 2: Oscillator (Pulsar)": "pulsar",
-        "Class 3: Spaceship (Glider)": "glider",
-        "Class 4: Complex (Glider Gun)": "gosper_glider_gun"
+        "Class 3: Mobile (Glider)": "glider",
+        "Class 4: Engine (Glider Gun)": "gosper_glider_gun"
     }
 
     # 4.4 Simulation Parameters for Statistical Power
@@ -29,11 +29,17 @@ def generate_full_research_dashboard(levels):
     STEPS = 500
 
     master_data = {}
+    csv_rows = ["Pattern,Noise Level,Success Rate,Avg Step Fail,Std Dev"]
 
     for label, pattern_name in classes.items():
         # Execution of the Batch Experiment (2,800 Total Runs across all classes)
         data = run_research_batch(levels, pattern_name=pattern_name, trials_per_level=TRIALS, steps_per_trial=STEPS)
         master_data[label] = data
+
+        noise_levels = sorted(data.keys())
+        for p in noise_levels:
+            res = data[p]
+            csv_rows.append(f"{pattern_name},{p:.1e},{res['success_rate']:.1f},{res['avg_fail']:.2f},{res['std_fail']:.2f}")
 
         # --- INDIVIDUAL CLASS ANALYSIS ---
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10))
@@ -107,9 +113,16 @@ def generate_full_research_dashboard(levels):
 
     fig_master.suptitle("Comparative Analysis of CA Complexity Classes under Stochastic Noise", y=0.98, fontsize=16, fontweight='bold')
     plt.tight_layout(pad=4.0, rect=[0, 0, 1, 0.99])
+    
+    # Save CSV Results
+    csv_file = os.path.join(output_dir, 'research_results.csv')
+    with open(csv_file, 'w') as f:
+        f.write("\n".join(csv_rows))
+    print(f"RESULTS CSV SAVED: '{csv_file}'")
+
     master_file = os.path.join(output_dir, 'master_comparison_dashboard.png')
     plt.savefig(master_file, dpi=300)  # High-DPI for publication quality
-    print(f"\nMASTER DASHBOARD SAVED: '{master_file}'")
+    print(f"MASTER DASHBOARD SAVED: '{master_file}'")
     plt.show()
 
 

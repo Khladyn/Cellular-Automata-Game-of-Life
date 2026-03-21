@@ -15,7 +15,7 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
     runner = ExperimentRunner(width, height, density=0)
     load_pattern(runner.control, pattern_name)
     
-    if use_eater:
+    if use_eater and pattern_name == "gosper_glider_gun":
         # Place eater to intercept gliders at default or specified offset
         load_pattern(runner.control, "eater", x_offset=eater_offset[0], y_offset=eater_offset[1])
         
@@ -63,7 +63,7 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
     
     # Initialize test image with the 3-color map
     im2 = ax_test.imshow(state['history'][0][1], cmap=test_cmap, vmin=0, vmax=2)
-    ax_test.set_title("Test (Red = Direct Bit Flips)", pad=8)
+    ax_test.set_title(f"Test: {pattern_name}", pad=8)
     
     im3 = ax_delta.imshow(state['history'][0][0] ^ state['history'][0][1], cmap='magma', vmin=0, vmax=1)
     ax_delta.set_title("Entropy Delta (XOR)", pad=8)

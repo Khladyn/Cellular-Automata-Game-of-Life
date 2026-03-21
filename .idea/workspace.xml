@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2057eb5-34ad-463f-a4b2-56fb23346fc4" name="Changes" comment="add eater">
+    <list default="true" id="c2057eb5-34ad-463f-a4b2-56fb23346fc4" name="Changes" comment="highlight noise">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/batch_experiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/batch_experiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/research_output/master_comparison_dashboard.png" beforeDir="false" afterPath="$PROJECT_DIR$/research_output/master_comparison_dashboard.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/research_output/results_class_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/research_output/results_class_1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/research_output/results_class_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/research_output/results_class_2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/research_output/results_class_3.png" beforeDir="false" afterPath="$PROJECT_DIR$/research_output/results_class_3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/research_output/results_class_4.png" beforeDir="false" afterPath="$PROJECT_DIR$/research_output/results_class_4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/visualization/plot_results.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualization/plot_results.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/visualization/viz.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualization/viz.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,9 +23,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="3BCC4Cpn4KmXix7oIVtjRoVVNIx" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -30,11 +35,13 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.batch_experiment.executor": "Debug",
+    "Python.gosper max.executor": "Debug",
     "Python.main.executor": "Debug",
     "Python.plot_results.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "com.google.cloudcode.ide_session_index": "20260321_0001",
     "git-widget-placeholder": "main"
   }
 }]]></component>
@@ -43,7 +50,7 @@
       <recent name="$PROJECT_DIR$/research_output" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.gosper max">
+  <component name="RunManager" selected="Python.main">
     <configuration name="batch_experiment" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="game_of_life" />
       <option name="ENV_FILES" value="" />
@@ -210,7 +217,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774080074331</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="highlight noise">
+      <option name="closed" value="true" />
+      <created>1774080826367</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1774080826367</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -220,6 +235,7 @@
     <MESSAGE value="refactor codebase" />
     <MESSAGE value="refactor viz" />
     <MESSAGE value="add eater" />
-    <option name="LAST_COMMIT_MESSAGE" value="add eater" />
+    <MESSAGE value="highlight noise" />
+    <option name="LAST_COMMIT_MESSAGE" value="highlight noise" />
   </component>
 </project>
