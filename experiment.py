@@ -17,17 +17,17 @@ class ExperimentRunner:
         """
         Advance both simulations by one step.
         Apply noise only to the test simulation.
-        Returns the delta (mask of differences).
+        Returns the noise mask (bit flips) applied this step.
         """
         # 1. Update both
         self.control.step()
         self.test.step()
         
-        # 2. Apply noise to Test
-        self.test.apply_stochastic_noise(noise_p)
+        # 2. Apply noise to Test and capture the flip mask
+        noise_mask = self.test.apply_stochastic_noise(noise_p)
         
-        # 3. Calculate Delta
-        return self.get_delta()
+        # 3. Return the mask of bits that were just flipped
+        return noise_mask
 
     def get_delta(self):
         """Identifies which pixels differ between Control and Test."""

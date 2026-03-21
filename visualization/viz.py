@@ -33,7 +33,7 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
 
     # Initial state
     stats = runner.get_delta_stats()
-    state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), initial_noise, stats))
+    state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), initial_noise, stats, np.zeros((height, width), dtype=bool)))
     state['integrity_history'].append(stats[3])
 
     fig = plt.figure(figsize=(14, 10))
@@ -54,11 +54,16 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
         ax.grid(which='major', color='blue', linestyle='-', linewidth=0.5, alpha=0.3)
         ax.tick_params(axis='both', which='major', labelsize=8)
 
+    from matplotlib.colors import ListedColormap
+    # Custom colormap: 0=White, 1=Black (Live), 2=Red (Noise/Error)
+    test_cmap = ListedColormap(['white', 'black', 'red'])
+
     im1 = ax_ctrl.imshow(state['history'][0][0], cmap='binary', vmin=0, vmax=1)
     ax_ctrl.set_title(f"Control: {pattern_name}", pad=8)
     
-    im2 = ax_test.imshow(state['history'][0][1], cmap='binary', vmin=0, vmax=1)
-    ax_test.set_title("Test (Stochastic SCA)", pad=8)
+    # Initialize test image with the 3-color map
+    im2 = ax_test.imshow(state['history'][0][1], cmap=test_cmap, vmin=0, vmax=2)
+    ax_test.set_title("Test (Red = Direct Bit Flips)", pad=8)
     
     im3 = ax_delta.imshow(state['history'][0][0] ^ state['history'][0][1], cmap='magma', vmin=0, vmax=1)
     ax_delta.set_title("Entropy Delta (XOR)", pad=8)
@@ -85,19 +90,28 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
             else:
                 noise_p = initial_noise + (max_noise - initial_noise) * (step_num / steps)
             
-            runner.step(noise_p=noise_p)
+            # runner.step() now returns the noise mask
+            noise_mask = runner.step(noise_p=noise_p)
             s = runner.get_delta_stats()
-            state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), noise_p, s))
+            state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), noise_p, s, noise_mask))
             state['integrity_history'].append(s[3])
             
             if state['collapse_step'] is None and s[3] < (1.0 - collapse_threshold):
                 state['collapse_step'] = step_num
 
         # Use the actual idx provided to show movement past collapse
-        ctrl, test, noise, stats = state['history'][idx]
+        ctrl, test, noise, stats, noise_mask = state['history'][idx]
         
         im1.set_data(ctrl)
-        im2.set_data(test)
+        
+        # Create a display grid for the test map:
+        # 0 = Dead, 1 = Live
+        # 2 = SOURCE NOISE (Red) - the cells that were flipped in the CURRENT step
+        display_test = test.copy().astype(np.uint8)
+        # Apply red color ONLY to the bits that were just flipped by noise in this step
+        display_test[noise_mask == 1] = 2
+        
+        im2.set_data(display_test)
         im3.set_data(ctrl ^ test)
         
         mode = ""

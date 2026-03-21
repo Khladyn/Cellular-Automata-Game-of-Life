@@ -48,15 +48,14 @@ class GameOfLifeEngine:
         """
         The Bernoulli Noise Agent (η).
         Introduces environmental entropy via Bit-Flip Operations (XOR).
-        Reference: Shannon (1948) - Information Entropy.
+        Returns the noise mask applied.
         """
         if p <= 0:
-            return
+            return np.zeros(self.grid.shape, dtype=bool)
 
         # Generates a mask where each cell has probability 'p' of being True
         noise_mask = np.random.random(self.grid.shape) < p
 
         # XOR Operator (^=):
-        # Flips state (0->1 or 1->0) to simulate 'bit-flip' errors.
-        # This creates the 'Interface Issue' between determinism and noise.
         self.grid ^= noise_mask.astype(np.uint8)
+        return noise_mask

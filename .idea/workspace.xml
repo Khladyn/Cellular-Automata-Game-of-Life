@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2057eb5-34ad-463f-a4b2-56fb23346fc4" name="Changes" comment="refactor viz">
+    <list default="true" id="c2057eb5-34ad-463f-a4b2-56fb23346fc4" name="Changes" comment="add eater">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/visualization/viz.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualization/viz.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,7 +43,7 @@
       <recent name="$PROJECT_DIR$/research_output" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.gosper max">
     <configuration name="batch_experiment" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="game_of_life" />
       <option name="ENV_FILES" value="" />
@@ -61,6 +61,30 @@
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="batch_experiment.py" />
       <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="gosper max" type="PythonConfigurationType" factoryName="Python">
+      <module name="game_of_life" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.13 (game_of_life)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="main.py" />
+      <option name="PARAMETERS" value="--viz --pattern gosper_glider_gun --noise 1e-4" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -118,6 +142,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.gosper max" />
       <item itemvalue="Python.batch_experiment" />
       <item itemvalue="Python.plot_results" />
     </list>
@@ -177,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774079178554</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add eater">
+      <option name="closed" value="true" />
+      <created>1774080074331</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1774080074331</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -186,6 +219,7 @@
     <MESSAGE value="add comparative simulation for block and gosper" />
     <MESSAGE value="refactor codebase" />
     <MESSAGE value="refactor viz" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor viz" />
+    <MESSAGE value="add eater" />
+    <option name="LAST_COMMIT_MESSAGE" value="add eater" />
   </component>
 </project>
