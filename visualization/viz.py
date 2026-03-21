@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from PIL.ImageOps import pad
 from matplotlib.animation import FuncAnimation
 from experiment import ExperimentRunner
 from assets import load_pattern
@@ -36,8 +37,8 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
     state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), initial_noise, stats, np.zeros((height, width), dtype=bool)))
     state['integrity_history'].append(stats[3])
 
-    fig = plt.figure(figsize=(14, 10))
-    gs = fig.add_gridspec(2, 3, height_ratios=[1, 0.5])
+    fig = plt.figure(figsize=(14, 8))
+    gs = fig.add_gridspec(2, 3, height_ratios=[1, 0.5], hspace=0.1)
     
     ax_ctrl = fig.add_subplot(gs[0, 0])
     ax_test = fig.add_subplot(gs[0, 1])
@@ -55,15 +56,16 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
         ax.tick_params(axis='both', which='major', labelsize=8)
 
     from matplotlib.colors import ListedColormap
-    # Custom colormap: 0=White, 1=Black (Live), 2=Red (Noise/Error)
-    test_cmap = ListedColormap(['white', 'black', 'red'])
+    # Custom colormap: 0=White, 1=Black (Live), 2=Red (Noise Birth), 3=Blue (Noise Death)
+    test_cmap = ListedColormap(['white', 'black', 'red', 'blue'])
 
     im1 = ax_ctrl.imshow(state['history'][0][0], cmap='binary', vmin=0, vmax=1)
     ax_ctrl.set_title(f"Control: {pattern_name}", pad=8)
-    
-    # Initialize test image with the 3-color map
-    im2 = ax_test.imshow(state['history'][0][1], cmap=test_cmap, vmin=0, vmax=2)
+
+    # Initialize test image with the 4-color map
+    im2 = ax_test.imshow(state['history'][0][1], cmap=test_cmap, vmin=0, vmax=3)
     ax_test.set_title(f"Test: {pattern_name}", pad=8)
+
     
     im3 = ax_delta.imshow(state['history'][0][0] ^ state['history'][0][1], cmap='magma', vmin=0, vmax=1)
     ax_delta.set_title("Entropy Delta (XOR)", pad=8)
@@ -80,7 +82,7 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
     collapse_line = ax_graph.axvline(x=-1, color='red', linestyle='--', alpha=0, label=f'Dissipation Threshold ({1-collapse_threshold:.0%})')
     ax_graph.legend(loc='lower left')
 
-    text = fig.suptitle(f"Pattern: {pattern_name.upper()} | Step: 0 | Integrity: 100%", y=0.97, fontsize=14, fontweight='bold')
+    text = fig.suptitle(f"Pattern: {pattern_name.upper()} | Step: 0 | Integrity: 100%", y=0.93, fontsize=14, fontweight='bold')
 
     def update_frame(idx):
         while len(state['history']) <= idx:
@@ -106,10 +108,15 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
         
         # Create a display grid for the test map:
         # 0 = Dead, 1 = Live
-        # 2 = SOURCE NOISE (Red) - the cells that were flipped in the CURRENT step
+        # 2 = SOURCE NOISE BIRTH (Red) - bit flipped 0 -> 1
+        # 3 = SOURCE NOISE DEATH (Blue) - bit flipped 1 -> 0
         display_test = test.copy().astype(np.uint8)
-        # Apply red color ONLY to the bits that were just flipped by noise in this step
-        display_test[noise_mask == 1] = 2
+        # Identify noise impacts
+        noise_birth = (noise_mask == 1) & (test == 1)
+        noise_death = (noise_mask == 1) & (test == 0)
+        
+        display_test[noise_birth] = 2
+        display_test[noise_death] = 3
         
         im2.set_data(display_test)
         im3.set_data(ctrl ^ test)
@@ -138,7 +145,7 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
             if state['collapse_step'] is not None:
                 break
         
-        plt.tight_layout(rect=[0, 0, 1, 0.96], h_pad=2.5)
+        plt.tight_layout(rect=[0, 0, 1, 1.0], h_pad=1.5)
         plt.savefig(save_path, dpi=150)
         plt.close(fig)
         print(f"Screenshot saved to: {save_path}")
@@ -193,7 +200,7 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
 
     fig.canvas.mpl_connect('key_press_event', on_key)
     ani = FuncAnimation(fig, update, frames=None, interval=30, blit=False, cache_frame_data=False)
-    plt.tight_layout(rect=[0, 0, 1, 0.96], h_pad=2.5)
+    plt.tight_layout(rect=[0, 0, 1, 1.0], h_pad=1.5)
     plt.show()
 
 

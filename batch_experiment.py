@@ -57,11 +57,12 @@ def run_research_batch(target_noise_levels, pattern_name="gosper_glider_gun", tr
 
             if not failed:
                 successes += 1
+                failure_steps.append(steps_per_trial)
 
         # Methodology 4.4: Statistical Convergence using Central Limit Theorem.
         success_rate = (successes / trials_per_level) * 100
-        avg_fail = np.mean(failure_steps) if failure_steps else 0.0
-        std_fail = np.std(failure_steps) if failure_steps else 0.0
+        avg_fail = np.mean(failure_steps)
+        std_fail = np.std(failure_steps)
 
         avg_display = f"{avg_fail:.1f}" if failure_steps else "N/A"
         std_display = f"{std_fail:.1f}" if failure_steps else "N/A"
