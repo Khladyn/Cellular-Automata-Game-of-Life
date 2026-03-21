@@ -58,7 +58,8 @@ def generate_full_research_dashboard(levels):
         ax2.set_title(f"System Reliability: {label}")
         ax2.set_ylabel("Success Rate %")
 
-        plt.tight_layout()
+        fig.suptitle(f"SCA Robustness Analysis: {label}", y=0.97, fontsize=14, fontweight='bold')
+        plt.tight_layout(rect=[0, 0, 1, 0.98], h_pad=3.0)
         safe_label = label.split(':')[0].lower().replace(' ', '_')
         file_path = os.path.join(output_dir, f'results_{safe_label}.png')
         plt.savefig(file_path)
@@ -104,7 +105,8 @@ def generate_full_research_dashboard(levels):
     ax_rel.legend()
     ax_rel.grid(True, which="both", alpha=0.1)
 
-    plt.tight_layout(pad=4.0)
+    fig_master.suptitle("Comparative Analysis of CA Complexity Classes under Stochastic Noise", y=0.98, fontsize=16, fontweight='bold')
+    plt.tight_layout(pad=4.0, rect=[0, 0, 1, 0.99])
     master_file = os.path.join(output_dir, 'master_comparison_dashboard.png')
     plt.savefig(master_file, dpi=300)  # High-DPI for publication quality
     print(f"\nMASTER DASHBOARD SAVED: '{master_file}'")

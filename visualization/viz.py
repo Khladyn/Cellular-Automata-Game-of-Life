@@ -4,12 +4,17 @@ from experiment import ExperimentRunner
 from assets import load_pattern
 import numpy as np
 
-def run_visualization(width=100, height=80, steps=1000, initial_noise=0.0, max_noise=0.01):
+def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, steps=500, initial_noise=1e-5, max_noise=None, collapse_threshold=0.2, save_path=None):
     """
     Research-grade visualization tracking Information Integrity.
+    Aligned with batch_experiment.py logic.
     """
+    if max_noise is None:
+        max_noise = initial_noise
+
     runner = ExperimentRunner(width, height, density=0)
-    load_pattern(runner.control, "gosper_glider_gun", 10, 10)
+    load_pattern(runner.control, pattern_name)
+    
     runner.test.grid = runner.control.grid.copy()
     
     state = {
@@ -18,17 +23,17 @@ def run_visualization(width=100, height=80, steps=1000, initial_noise=0.0, max_n
         'history': [],
         'layout': None,
         'collapse_step': None,
-        'integrity_history': []
+        'integrity_history': [],
+        'announced_collapse': False
     }
 
     # Initial state
     stats = runner.get_delta_stats()
-    # stats = (diff_count, diff_pct, survival_score, info_integrity)
-    state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), 0.0, stats))
-    state['integrity_history'].append(stats[3]) # Use Information Integrity
+    state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), initial_noise, stats))
+    state['integrity_history'].append(stats[3])
 
     fig = plt.figure(figsize=(14, 10))
-    gs = fig.add_gridspec(2, 3, height_ratios=[1, 0.6])
+    gs = fig.add_gridspec(2, 3, height_ratios=[1, 0.5])
     
     ax_ctrl = fig.add_subplot(gs[0, 0])
     ax_test = fig.add_subplot(gs[0, 1])
@@ -36,99 +41,133 @@ def run_visualization(width=100, height=80, steps=1000, initial_noise=0.0, max_n
     ax_graph = fig.add_subplot(gs[1, :])
 
     im1 = ax_ctrl.imshow(state['history'][0][0], cmap='binary', vmin=0, vmax=1)
-    ax_ctrl.set_title("Control (Reference Pattern)")
+    ax_ctrl.set_title(f"Control: {pattern_name}", pad=8)
     
     im2 = ax_test.imshow(state['history'][0][1], cmap='binary', vmin=0, vmax=1)
-    ax_test.set_title("Test (Noise Injected)")
+    ax_test.set_title("Test (Stochastic SCA)", pad=8)
     
-    # Still show the full delta visually, but the graph is focused on the pattern
     im3 = ax_delta.imshow(state['history'][0][0] ^ state['history'][0][1], cmap='magma', vmin=0, vmax=1)
-    ax_delta.set_title("Delta (Visual Diff)")
+    ax_delta.set_title("Entropy Delta (XOR)", pad=8)
     
-    # Graph Setup
     line, = ax_graph.plot([], [], color='green', label='Information Integrity')
     ax_graph.set_xlim(0, steps)
     ax_graph.set_ylim(-0.05, 1.05)
-    ax_graph.set_xlabel("Step")
-    ax_graph.set_ylabel("Pattern Retention Score")
-    ax_graph.set_title("Information Decay (Intended vs. Actual Logic Cells)")
+    ax_graph.set_xlabel("Step (t)")
+    ax_graph.set_ylabel("Integrity Φ(t)")
+    ax_graph.set_title(f"Information Decay @ Noise p={initial_noise:.1e}", pad=8)
     ax_graph.grid(True, alpha=0.3)
     
     marker, = ax_graph.plot([], [], 'go', markersize=4)
-    collapse_line = ax_graph.axvline(x=-1, color='red', linestyle='--', alpha=0)
+    collapse_line = ax_graph.axvline(x=-1, color='red', linestyle='--', alpha=0, label=f'Dissipation Threshold ({1-collapse_threshold:.0%})')
+    ax_graph.legend(loc='lower left')
 
-    text = fig.suptitle(f"Step: 0 | Noise: 0.0000 | Pattern Integrity: 100% [Playing]")
+    text = fig.suptitle(f"Pattern: {pattern_name.upper()} | Step: 0 | Integrity: 100%", y=0.97, fontsize=14, fontweight='bold')
 
-    def update_ui():
-        idx = state['current_idx']
-        mode = "[Paused]" if state['paused'] else "[Playing]"
+    def update_frame(idx):
+        while len(state['history']) <= idx:
+            step_num = len(state['history'])
+            if initial_noise == max_noise:
+                noise_p = initial_noise
+            else:
+                noise_p = initial_noise + (max_noise - initial_noise) * (step_num / steps)
+            
+            runner.step(noise_p=noise_p)
+            s = runner.get_delta_stats()
+            state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), noise_p, s))
+            state['integrity_history'].append(s[3])
+            
+            if state['collapse_step'] is None and s[3] < (1.0 - collapse_threshold):
+                state['collapse_step'] = step_num
+
+        # Use the actual idx provided to show movement past collapse
+        ctrl, test, noise, stats = state['history'][idx]
         
-        # Mark the collapse step if we are at or past it
+        im1.set_data(ctrl)
+        im2.set_data(test)
+        im3.set_data(ctrl ^ test)
+        
+        mode = ""
         if state['collapse_step'] is not None and idx >= state['collapse_step']:
-            mode = f"[Collapsed at Step {state['collapse_step']}]"
+            mode = f"[DISSIPATED at Step {state['collapse_step']}]"
             text.set_color('red')
+            collapse_line.set_xdata([state['collapse_step']])
+            collapse_line.set_alpha(0.8)
         else:
             text.set_color('black')
+
+        text.set_text(f"Pattern: {pattern_name.upper()} | Step: {idx} | Noise: {noise:.1e} | Integrity: {stats[3]:.2%} {mode}")
         
-        if idx < len(state['history']):
-            _, _, noise, stats = state['history'][idx]
-            # Use info_integrity (index 3) for the readout
-            text.set_text(f"Step: {idx} | Noise: {noise:.6f} | Pattern Integrity: {stats[3]:.2%} {mode}")
-            
-            x_data = list(range(len(state['integrity_history'])))
-            line.set_data(x_data, state['integrity_history'])
-            marker.set_data([idx], [state['integrity_history'][idx]])
-            
+        x_data = list(range(len(state['integrity_history'])))
+        line.set_data(x_data, state['integrity_history'])
+        marker.set_data([idx], [state['integrity_history'][idx]])
+        return [im1, im2, im3, line, marker, collapse_line, text]
+
+    if save_path:
+        print(f"Generating non-interactive screenshot for {pattern_name}...")
+        # Run until collapse or max steps
+        for i in range(steps + 1):
+            update_frame(i)
             if state['collapse_step'] is not None:
-                collapse_line.set_xdata([state['collapse_step']])
-                collapse_line.set_alpha(0.8)
-
-        fig.canvas.draw_idle()
-
-    def on_key(event):
-        if event.key == ' ':
-            state['paused'] = not state['paused']
-        elif event.key == 'left':
-            state['paused'] = True
-            state['current_idx'] = max(0, state['current_idx'] - 1)
-        elif event.key == 'right':
-            state['paused'] = True
-            state['current_idx'] = min(steps, state['current_idx'] + 1)
-        update_ui()
-
-    fig.canvas.mpl_connect('key_press_event', on_key)
+                break
+        
+        plt.tight_layout(rect=[0, 0, 1, 0.96], h_pad=2.5)
+        plt.savefig(save_path, dpi=150)
+        plt.close(fig)
+        print(f"Screenshot saved to: {save_path}")
+        return
 
     def update(frame):
         if not state['paused']:
             if state['current_idx'] < steps:
                 state['current_idx'] += 1
         
-        idx = state['current_idx']
+        update_frame(state['current_idx'])
         
-        while len(state['history']) <= idx:
-            step_num = len(state['history'])
-            noise_p = initial_noise + (max_noise - initial_noise) * (step_num / steps)
-            runner.step(noise_p=noise_p)
-            s = runner.get_delta_stats()
-            state['history'].append((runner.control.grid.copy(), runner.test.grid.copy(), noise_p, s))
-            state['integrity_history'].append(s[3]) # Use info_integrity
-            # Detect Collapse for the first time
-            if state['collapse_step'] is None and runner.check_collapse(threshold=0.5):
-                state['collapse_step'] = step_num
-                state['paused'] = True
-                print(f"Collapse detected at Step {step_num}. Noise Probability: {noise_p:.6f}")
-                break
+        # Reset announced_collapse if we are before the collapse step
+        # This allows auto-pause to trigger again on replay
+        if state['collapse_step'] is not None and state['current_idx'] < state['collapse_step']:
+            state['announced_collapse'] = False
 
-        ctrl, test, _, _ = state['history'][idx]
-        im1.set_data(ctrl)
-        im2.set_data(test)
-        im3.set_data(ctrl ^ test)
-        update_ui()
+        # Auto-pause only at the exact moment of collapse (once)
+        if (state['collapse_step'] is not None and 
+            state['current_idx'] == state['collapse_step'] and 
+            not state['announced_collapse']):
+            
+            state['paused'] = True
+            state['announced_collapse'] = True
+            print(f"Structural Collapse detected at Step {state['current_idx']}. Pausing for inspection (Press Space to continue)...")
+            
         return [im1, im2, im3, line, marker, collapse_line, text]
 
+    def on_key(event):
+        if event.key == ' ':
+            if state['current_idx'] >= steps:
+                # Replay from 0
+                state['current_idx'] = 0
+                state['paused'] = False
+                state['announced_collapse'] = False
+                print("Replaying simulation from Step 0...")
+            else:
+                state['paused'] = not state['paused']
+        elif event.key == 'f':
+            if state['collapse_step'] is not None:
+                state['current_idx'] = state['collapse_step']
+                state['paused'] = True
+                print(f"Jumped to Failure Point (Step {state['collapse_step']})")
+            else:
+                print("Failure point not yet reached.")
+        elif event.key == 'left':
+            state['paused'] = True
+            state['current_idx'] = max(0, state['current_idx'] - 1)
+        elif event.key == 'right':
+            state['paused'] = True
+            state['current_idx'] = min(steps, state['current_idx'] + 1)
+
+    fig.canvas.mpl_connect('key_press_event', on_key)
     ani = FuncAnimation(fig, update, frames=None, interval=30, blit=False, cache_frame_data=False)
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.tight_layout(rect=[0, 0, 1, 0.96], h_pad=2.5)
     plt.show()
+
 
 if __name__ == "__main__":
     run_visualization()
