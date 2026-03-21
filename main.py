@@ -16,15 +16,24 @@ def main():
                         help="If set, noise will ramp from 0 to --noise over the course of the simulation")
     parser.add_argument("--save", type=str, default=None,
                         help="If set, saves the final visualization frame to this path and exits")
+    parser.add_argument("--no-eater", action="store_true",
+                        help="Disable the default Eater 1 pattern")
+    parser.add_argument("--eater-x", type=int, default=85,
+                        help="X coordinate for the Eater 1 pattern (default: 85)")
+    parser.add_argument("--eater-y", type=int, default=84,
+                        help="Y coordinate for the Eater 1 pattern (default: 84)")
+    
     args = parser.parse_args()
 
     if args.viz:
         if args.save:
-            print(f"Generating screenshot: {args.save}")
+            print(f"Generating screenshot: {args.save} (Eater: {not args.no_eater})")
         else:
             print(f"Starting Visualization: {args.pattern} @ {'Ramping' if args.ramp else 'Constant'} Noise {args.noise:.1e}")
             if args.no_noise:
                 print("Deterministic Mode: Stochastic noise disabled (p=0)")
+            if not args.no_eater:
+                print(f"Eater 1 deployed at ({args.eater_x}, {args.eater_y})")
             print("Controls: [Space] Pause/Play/Replay | [F] Jump to Failure | [Left/Arrow] Step Frame | [Esc] Close")
         
         noise_level = 0.0 if args.no_noise else args.noise
@@ -38,7 +47,9 @@ def main():
             initial_noise=init_noise, 
             max_noise=noise_level,
             collapse_threshold=0.2,
-            save_path=args.save
+            save_path=args.save,
+            use_eater=not args.no_eater,
+            eater_offset=(args.eater_x, args.eater_y)
         )
     else:
         print("Starting Game of Life: Research Batch & Dashboard Generation...")

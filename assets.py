@@ -49,6 +49,13 @@ PATTERNS = {
     "block": [
         "OO",
         "OO"
+    ],
+    # Eater 1: A stable 7-cell still life (Fishhook) that consumes gliders.
+    "eater": [
+        "OO..",
+        "O.O.",
+        "..O.",
+        "..OO"
     ]
 }
 

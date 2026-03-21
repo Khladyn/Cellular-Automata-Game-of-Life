@@ -4,7 +4,7 @@ from experiment import ExperimentRunner
 from assets import load_pattern
 import numpy as np
 
-def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, steps=500, initial_noise=1e-5, max_noise=None, collapse_threshold=0.2, save_path=None):
+def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, steps=500, initial_noise=1e-5, max_noise=None, collapse_threshold=0.2, save_path=None, use_eater=True, eater_offset=(85, 84)):
     """
     Research-grade visualization tracking Information Integrity.
     Aligned with batch_experiment.py logic.
@@ -15,6 +15,10 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
     runner = ExperimentRunner(width, height, density=0)
     load_pattern(runner.control, pattern_name)
     
+    if use_eater:
+        # Place eater to intercept gliders at default or specified offset
+        load_pattern(runner.control, "eater", x_offset=eater_offset[0], y_offset=eater_offset[1])
+        
     runner.test.grid = runner.control.grid.copy()
     
     state = {
@@ -39,6 +43,16 @@ def run_visualization(pattern_name="gosper_glider_gun", width=100, height=100, s
     ax_test = fig.add_subplot(gs[0, 1])
     ax_delta = fig.add_subplot(gs[0, 2])
     ax_graph = fig.add_subplot(gs[1, :])
+
+    # Add grid lines for coordinate tracking
+    for ax in [ax_ctrl, ax_test, ax_delta]:
+        ax.set_xticks(np.arange(-0.5, width, 10), minor=False)
+        ax.set_yticks(np.arange(-0.5, height, 10), minor=False)
+        ax.set_xticks(np.arange(-0.5, width, 1), minor=True)
+        ax.set_yticks(np.arange(-0.5, height, 1), minor=True)
+        ax.grid(which='minor', color='gray', linestyle='-', linewidth=0.1, alpha=0.5)
+        ax.grid(which='major', color='blue', linestyle='-', linewidth=0.5, alpha=0.3)
+        ax.tick_params(axis='both', which='major', labelsize=8)
 
     im1 = ax_ctrl.imshow(state['history'][0][0], cmap='binary', vmin=0, vmax=1)
     ax_ctrl.set_title(f"Control: {pattern_name}", pad=8)
