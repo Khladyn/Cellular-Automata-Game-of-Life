@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2057eb5-34ad-463f-a4b2-56fb23346fc4" name="Changes" comment="regenerate results" />
+    <list default="true" id="c2057eb5-34ad-463f-a4b2-56fb23346fc4" name="Changes" comment="add read me">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -253,7 +255,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775245433417</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add read me">
+      <option name="closed" value="true" />
+      <created>1775245994455</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1775245994455</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -265,6 +275,7 @@
     <MESSAGE value="add eater" />
     <MESSAGE value="highlight noise" />
     <MESSAGE value="regenerate results" />
-    <option name="LAST_COMMIT_MESSAGE" value="regenerate results" />
+    <MESSAGE value="add read me" />
+    <option name="LAST_COMMIT_MESSAGE" value="add read me" />
   </component>
 </project>

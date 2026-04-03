@@ -39,7 +39,7 @@ When running in `--viz` mode, use the following keys:
 | Argument | Description | Default |
 | :--- | :--- | :--- |
 | `--viz` | Run the interactive visualization mode | Research Batch |
-| `--pattern` | Choose: `block`, `pulsar`, or `glider` | `gosper_glider_gun` |
+| `--pattern` | Choose: `block`, `pulsar`, `glider`, or `gosper_glider_gun` | `gosper_glider_gun` |
 | `--noise` | Set the constant noise probability (p) | `1e-5` |
 | `--no-noise` | Disable all stochastic noise (Deterministic mode) | `False` |
 | `--ramp` | Increase noise linearly from 0 to `--noise` over 500 steps | `False` |
